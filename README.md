@@ -1,7 +1,6 @@
 # Pi-hole Setup Guide for 🍊 Orange Pi
 
 A simple setup to install [Pi-hole](https://pi-hole.net/) on an Orange Pi and automatically fix DNS resolution issues after reboot.
-
 It was tested on Orange Pi Zero 3
 ---
 
