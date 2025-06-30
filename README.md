@@ -37,7 +37,7 @@ chmod +x /usr/local/bin/restart-dns.sh
 
 ---
 
-## ⏰ Step 3: Schedule the Script to Run at Boot
+## ⏰ Step 3: Create a Schedule the Script to Run at Boot
 
 Open the crontab editor:
 
@@ -69,43 +69,9 @@ Then reboot to verify:
 sudo reboot
 ```
 
-After reboot, check if DNS is working by running:
-
-```bash
-dig pi.hole
-```
-
 ---
-
-## 🛠️ Troubleshooting
-
-* Make sure the script is executable:
-
-  ```bash
-  chmod +x /usr/local/bin/restart-dns.sh
-  ```
-
-* Check for Pi-hole service status:
-
-  ```bash
-  sudo systemctl status pihole-FTL
-  ```
-
-* Check cron logs if the script didn’t run after reboot:
-
-  ```bash
-  grep CRON /var/log/syslog
-  ```
-
----
-
-## 📘 License
-
-This project is open-source and available under the [MIT License](LICENSE).
-
----
-
 ## 🙌 Credits
 
 Created by [RGPtv](https://github.com/RGPtv).
+
 Pi-hole is a registered trademark of Pi-hole LLC.
