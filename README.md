@@ -25,8 +25,6 @@ curl -sSL https://install.pi-hole.net | bash
 
 > This launches the interactive setup to guide you through the Pi-hole configuration.
 
----
-
 ## 🔧 Step 2: Fix DNS Issues on Reboot (Applies to All Installs)
 
 Download the `restart-dns.sh` script:
@@ -49,8 +47,6 @@ Add the following line:
 ```
 
 > ⚠️ Keep the `sleep 5` to allow the system to fully boot before running the script.
-
----
 
 ## ✅ Optional: Test the DNS Restart Script
 
