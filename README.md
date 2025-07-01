@@ -96,4 +96,5 @@ docker compose up -d
 ## 🙌 Credits
 
 Created by [RGPtv](https://github.com/RGPtv)
+
 Pi-hole is a registered trademark of Pi-hole LLC.
