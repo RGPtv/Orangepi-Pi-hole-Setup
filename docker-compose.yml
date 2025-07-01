@@ -4,6 +4,7 @@ services:
     hostname: PiHole-Server
     container_name: pihole
     image: pihole/pihole:latest
+    mac_address: 5E:8D:E4:6E:AF:2C # <-- Static MAC address (pick your own)
     networks:
       pihole_network:
         ipv4_address: '192.168.0.2' #update if needed
@@ -18,7 +19,7 @@ services:
       # Uncomment the line below if you are using Pi-hole as your DHCP server
       #- "67:67/udp"
       # Uncomment the line below if you are using Pi-hole as your NTP server
-      #- "123:123/udp"
+      - "123:123/udp"
     environment:
       # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
       TZ: 'Asia/Manila'
@@ -41,6 +42,8 @@ services:
       # Optional, if Pi-hole should get some more processing time
       - SYS_NICE
     restart: unless-stopped
+    dns:
+      - 192.168.0.1 # <-- Pick your own DNS address (example: 8.8.8.8)
 networks:
   pihole_network:
     driver: macvlan
