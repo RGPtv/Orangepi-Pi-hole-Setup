@@ -1,8 +1,8 @@
 # Pi-hole Setup Guide for 🍊 OrangePi
 
-A simple setup to install [Pi-hole](https://pi-hole.net/) on an Orange Pi and automatically fix DNS resolution issues after reboot.
+A simple guide to install [Pi-hole](https://pi-hole.net/) on an Orange Pi, with support for both standard and Docker-based installations. It includes an automatic fix for DNS resolution issues after reboot.
 
-It was tested on OrangePi Zero 3.
+✅ Tested on **OrangePi Zero 3**.
 
 ---
 
@@ -11,69 +11,93 @@ It was tested on OrangePi Zero 3.
 * Orange Pi running a Debian/Ubuntu-based OS
 * Root or sudo access
 * Internet connection
+* (Optional) Docker & Docker Compose installed
 
 ---
 
-## ✅ Step 1: Install Pi-hole (One-Step Automated Method)
+## ✅ Option 1: Install Pi-hole (One-Step Automated Method)
 
-Run the following command to install Pi-hole using the official automated script:
+Run the following command to install Pi-hole using the official script:
 
 ```bash
 curl -sSL https://install.pi-hole.net | bash
 ```
 
-> This will launch the interactive setup and guide you through Pi-hole configuration.
+> This launches the interactive setup to guide you through the Pi-hole configuration.
 
 ---
 
-## 🔧 Step 2: Download the DNS Restart Script
+## 🔧 Step 2: Fix DNS Issues on Reboot (Applies to All Installs)
 
-Download the `restart-dns.sh` script, which ensures the DNS server starts properly after a reboot:
+Download the `restart-dns.sh` script:
 
 ```bash
 wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/refs/heads/main/restart-dns.sh -O /usr/local/bin/restart-dns.sh
 chmod +x /usr/local/bin/restart-dns.sh
 ```
 
-> This script restarts the Pi-hole DNS service after the system boots, preventing DNS errors.
-
----
-
-## ⏰ Step 3: Create a Schedule the Script to Run at Boot
-
-Open the crontab editor:
+Schedule it to run at boot:
 
 ```bash
 crontab -e
 ```
 
-Add the following line at the bottom:
+Add the following line:
 
 ```bash
 @reboot sleep 5 && /usr/local/bin/restart-dns.sh
 ```
 
-> ⚠️ **Do not change the `sleep 5` delay.** This allows the system to fully boot before executing the script.
+> ⚠️ Keep the `sleep 5` to allow the system to fully boot before running the script.
 
 ---
 
-## 💪 Optional: Test It Works
+## ✅ Optional: Test the DNS Restart Script
 
-You can test the script manually before rebooting:
+To verify the script manually:
 
 ```bash
 /usr/local/bin/restart-dns.sh
 ```
 
-Then reboot to verify:
+Reboot to confirm it works automatically:
 
 ```bash
 sudo reboot
 ```
+---
+
+## 🐳 Option 2: Install Pi-hole Using Docker
+
+If you prefer a containerized setup:
+
+### 🧱 Step 1: Create a Project Directory
+
+```bash
+mkdir pihole
+cd pihole
+```
+
+### 📄 Step 2: Download and Configure `docker-compose.yml`
+
+```bash
+wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/refs/heads/main/docker-compose.yml
+nano docker-compose.yml
+```
+
+> Edit the file to match your network and DNS settings.
+
+### 🚀 Step 3: Launch Pi-hole
+
+```bash
+docker compose up -d
+```
+
+> Pi-hole will now run as a background container.
 
 ---
+
 ## 🙌 Credits
 
-Created by [RGPtv](https://github.com/RGPtv).
-
+Created by [RGPtv](https://github.com/RGPtv)
 Pi-hole is a registered trademark of Pi-hole LLC.
