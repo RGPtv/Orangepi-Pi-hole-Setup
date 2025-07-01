@@ -81,7 +81,7 @@ wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/refs/heads/m
 nano docker-compose.yml
 ```
 
-> Edit the file to match your network and DNS settings.
+> Edit the file to match your network settings and change PiHole password.
 
 ### 🚀 Step 3: Launch Pi-hole
 
