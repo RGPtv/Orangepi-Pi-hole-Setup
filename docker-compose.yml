@@ -44,7 +44,7 @@ services:
     restart: unless-stopped
     dns:
       - 8.8.8.8 # <-- Pick your own DNS address (example: 8.8.8.8)
-      - 8.8.8.1 # <-- Pick your own DNS address (example: 8.8.8.8)
+      - 8.8.1.1 # <-- Pick your own DNS address (example: 8.8.8.8)
 networks:
   pihole_network:
     driver: macvlan
