@@ -79,7 +79,7 @@ wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/main/docker-
 nano docker-compose.yml
 ```
 
-> ⚙️ Adjust the environment variables (password, IP, timezone) to fit your setup.
+> ⚙️ Adjust the environment variables (password, IP, timezone, and etc) to fit your setup.
 
 ### 3. Start the container:
 
