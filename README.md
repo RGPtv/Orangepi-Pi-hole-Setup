@@ -70,8 +70,8 @@ If you prefer a containerized setup:
 ### 🧱 Step 1: Create a Project Directory
 
 ```bash
-mkdir pihole
-cd pihole
+mkdir /docker/pihole
+cd /docker/pihole
 ```
 
 ### 📄 Step 2: Download and Configure `docker-compose.yml`
