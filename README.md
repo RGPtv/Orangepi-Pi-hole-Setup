@@ -27,7 +27,7 @@ curl -sSL https://install.pi-hole.net | bash
 
 ---
 
-## 🔧 Fix DNS Issues on Reboot (For All Install Methods)
+## 🔧 Fix DNS Issues on Reboot (For "Option 1" ONLY)
 
 If DNS stops working after reboot, fix it with a helper script:
 
@@ -88,10 +88,6 @@ docker compose up -d
 ```
 
 Pi-hole will now be running in the background.
-
----
-
-## 🔁 Auto-Start Pi-hole on Boot (Docker Only)
 
 ### 4. Create a systemd service:
 
