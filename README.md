@@ -1,108 +1,109 @@
-![Pi-hole](https://pi-hole.net/logo.svg)
-# OrangePi Pi-hole Setup Guide 🍊
+# 🍊 Pi-hole Setup Guide for Orange Pi
 
-A streamlined guide to install **Pi-hole** on your Orange Pi, with both native and Docker-based options. Includes an automated fix for DNS resolution hiccups after reboot.
+This guide walks you through installing [Pi-hole](https://pi-hole.net/) on an Orange Pi, using either a direct installation or Docker. It also includes an automated fix for DNS resolution issues after reboot.
 
-> Tested on **OrangePi Zero 3** running Debian/Ubuntu-based distributions.
-
----
-
-## 📋 Table of Contents
-
-1. [Requirements](#-requirements)
-2. [Option 1: Native Installation](#-option-1-native-installation)
-   - [Automated One-Liner](#automated-one-liner)
-   - [Post-Install: DNS Fix on Reboot](#post-install-dns-fix-on-reboot)
-3. [Option 2: Docker Installation](#-option-2-docker-installation)
-   1. [Prepare Project Directory](#1-prepare-project-directory)
-   2. [Configure Compose File](#2-configure-compose-file)
-   3. [Launch Container](#3-launch-container)
-   4. [Enable Auto-Start with systemd](#4-enable-auto-start-with-systemd)
-4. [Testing & Validation](#-testing--validation)
-5. [Troubleshooting](#-troubleshooting)
-6. [Credits & License](#-credits--license)
+📅 **Tested on OrangePi Zero 3**
 
 ---
 
 ## 📦 Requirements
 
-- Orange Pi running a Debian/Ubuntu-based OS
-- `root` or `sudo` privileges
-- Active Internet connection
-- *(Optional)* Docker & Docker Compose
+* Orange Pi running Debian/Ubuntu-based OS
+* Root or sudo access
+* Internet connection
+* (Optional) Docker & Docker Compose
 
 ---
 
-## ✅ Option 1: Native Installation
+## ✅ Option 1: Install Pi-hole (One-Step Script)
 
-### 🔰 Automated One-Liner
-
-Install Pi-hole in one step using the official installer:
+Run the following command to install Pi-hole using the official interactive script:
 
 ```bash
 curl -sSL https://install.pi-hole.net | bash
 ```
 
-1. Follow the interactive prompts.
-2. Choose your upstream DNS provider, blocking lists, and interface.
-
-### 🛠️ Post-Install: DNS Fix on Reboot
-
-1. Download the DNS-restart script:
-   ```bash
-   wget \
-     https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/main/restart-dns.sh \
-     -O /usr/local/bin/restart-dns.sh
-   chmod +x /usr/local/bin/restart-dns.sh
-   ```
-2. Schedule at boot:
-   ```bash
-   (sudo crontab -l 2>/dev/null; echo "@reboot sleep 5 && /usr/local/bin/restart-dns.sh") | sudo crontab -
-   ```
-
-> **Note:** `sleep 5` ensures system services are fully up before restarting DNS.
+> 💡 This script will guide you through network configuration and web admin setup.
 
 ---
 
-## 🐳 Option 2: Docker Installation
+## 🔧 Fix DNS Issues on Reboot (For All Install Methods)
 
-Run Pi-hole in a container for isolation and portability.
+If DNS stops working after reboot, fix it with a helper script:
 
-### 1. Prepare Project Directory
+### 1. Download and set permissions:
 
 ```bash
-sudo mkdir -p /docker/pihole
-sudo chown $USER:$USER /docker/pihole
+wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/main/restart-dns.sh -O /usr/local/bin/restart-dns.sh
+chmod +x /usr/local/bin/restart-dns.sh
+```
+
+### 2. Run at boot via `crontab`:
+
+```bash
+crontab -e
+```
+
+Add this line at the end:
+
+```bash
+@reboot sleep 5 && /usr/local/bin/restart-dns.sh
+```
+
+> ⏱️ The `sleep 5` ensures the system finishes booting before restarting DNS.
+
+### 3. Test the script (Optional):
+
+```bash
+/usr/local/bin/restart-dns.sh
+sudo reboot
+```
+
+---
+
+## 🐳 Option 2: Install Pi-hole with Docker
+
+For a portable and isolated setup using Docker.
+
+### 1. Create project directory:
+
+```bash
+mkdir -p /docker/pihole
 cd /docker/pihole
 ```
 
-### 2. Configure Compose File
+### 2. Download and edit `docker-compose.yml`:
 
 ```bash
 wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/main/docker-compose.yml
 nano docker-compose.yml
 ```
 
-> Update network settings, ports, environment variables, and the admin password.
+> ⚙️ Adjust the environment variables (password, IP, timezone) to fit your setup.
 
-### 3. Launch Container
+### 3. Start the container:
 
 ```bash
 docker compose up -d
 ```
 
-Verify with:
+Pi-hole will now be running in the background.
+
+---
+
+## 🔁 Auto-Start Pi-hole on Boot (Docker Only)
+
+### 4. Create a systemd service:
+
 ```bash
-docker ps | grep pihole
+sudo nano /etc/systemd/system/pihole.service
 ```
 
-### 4. Enable Auto-Start with systemd
-
-Create `/etc/systemd/system/pihole.service`:
+Paste the following:
 
 ```ini
 [Unit]
-Description=Pi-hole Container
+Description=Pi-hole Docker Service
 Requires=docker.service
 After=docker.service
 
@@ -118,7 +119,7 @@ TimeoutStartSec=0
 WantedBy=multi-user.target
 ```
 
-Enable and start:
+### 5. Enable the service:
 
 ```bash
 sudo systemctl daemon-reload
@@ -129,27 +130,9 @@ sudo systemctl status pihole.service
 
 ---
 
-## 🧪 Testing & Validation
+## 🙌 Credits
 
-1. **Web UI**: Access `http://<OrangePi_IP>/admin/`
-2. **Blocking Test**: Visit `http://pi.hole/admin/query` for query logs.
-3. **Reboot Check**: Reboot and ensure DNS queries still resolve.
-
----
-
-## ⚠️ Troubleshooting
-
-- **No DNS after reboot**: Verify `restart-dns.sh` path and cron entry.
-- **Docker port conflicts**: Change host ports in `docker-compose.yml`.
-- **Permissions issues**: Ensure `/docker/pihole` is owned by the Docker user or service.
+Created by [RGPtv](https://github.com/RGPtv)
+Pi-hole is a registered trademark of Pi-hole LLC.
 
 ---
-
-## 🙌 Credits & License
-
-- **Guide Maintainer**: [RGPtv](https://github.com/RGPtv)
-- **Pi-hole**: © Pi-hole LLC — licensed under [GPLv3](https://opensource.org/licenses/GPL-3.0)
-
----
-
-*Happy ad-blocking!*
