@@ -67,14 +67,14 @@ sudo reboot
 
 If you prefer a containerized setup:
 
-### 🧱 Step 1: Create a Project Directory
+### Step 1: Create a Project Directory
 
 ```bash
 mkdir /docker/pihole
 cd /docker/pihole
 ```
 
-### 📄 Step 2: Download and Configure `docker-compose.yml`
+### Step 2: Download and Configure `docker-compose.yml`
 
 ```bash
 wget https://raw.githubusercontent.com/RGPtv/Orangepi-Pi-hole-Setup/refs/heads/main/docker-compose.yml
@@ -83,13 +83,47 @@ nano docker-compose.yml
 
 > Edit the file to match your network settings and change PiHole password.
 
-### 🚀 Step 3: Launch Pi-hole
+### Step 3: Launch Pi-hole
 
 ```bash
 docker compose up -d
 ```
 
 > Pi-hole will now run as a background container.
+
+###  Step 4: Create a system service to automatically start your Pi-hole.
+
+```bash
+nano /etc/systemd/system/pihole.service
+```
+
+and copy this code:
+
+```bash
+[Unit]
+Description=Pi-hole Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/docker/pihole
+ExecStart=/usr/bin/docker compose up -d
+ExecStop=/usr/bin/docker compose down
+TimeoutStartSec=0
+
+[Install]
+WantedBy=multi-user.target
+```
+
+###  Step 5: reload the services and start the service.
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl start pihole.service
+sudo systemctl status pihole.service
+```
 
 ---
 
